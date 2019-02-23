@@ -1,0 +1,16 @@
+<div id="wrapper">
+    <h1>Note Scraper</h1>
+    <h2><i>If you can do this...the homework should be no problem.</i></h2>
+    <div id="articles">
+        {{#each articles}}
+            <h2>
+                <a href={{link}}>{{title}}</a>
+            </h2>
+            <br>
+        {{/each}}
+    </div>
+    <div id="notes"></div>
+    
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="app.js"></script>
