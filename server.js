@@ -1,20 +1,20 @@
-var express = require("express");
-var logger = require("morgan");
-var mongoose = require("mongoose");
+const express = require("express");
+const logger = require("morgan");
+const mongoose = require("mongoose");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
-var axios = require("axios");
-var cheerio = require("cheerio");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 // Require all models
-var db = require("./models/Article.js");
+const db = require("./models/Article.js");
 
-var PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Initialize Express
-var app = express();
+const app = express();
 
 // Configure middleware
 
@@ -26,14 +26,16 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-let exphbs = require("express-handlebars");
+const exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 // Connect to the Mongo DB
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
-mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser:true
+});
 
 // Routes
 
@@ -43,12 +45,12 @@ app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
   axios.get("https://www.wsj.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
+    let $ = cheerio.load(response.data);
 
 
     $(".wsj-card-body.clearfix.no-flow").each(function(i, element) {
       // Save an empty result object
-      var result = {};
+      let result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
@@ -110,4 +112,3 @@ db.Article.deleteMany({}, (err,docs)=>{
     console.log("App running on port " + PORT + "!");
   });
 })
-
